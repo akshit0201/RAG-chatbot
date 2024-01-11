@@ -22,8 +22,6 @@ sys.path.append('../..')
 import panel as pn  # GUI
 pn.extension()
 
-from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv()) # read local .env file
 
 
 # Code to create a pop-up dialog for OpenAI API Key input
@@ -35,7 +33,6 @@ api_key_input.on_change('value', api_key_callback)
 
 # Add the API key input to the top of the GUI layout
 layout = pn.Column(api_key_input)
-openai.api_key  = os.environ['OPENAI_API_KEY']
 
 
 # The code below was added to assign the openai LLM version filmed until it is deprecated, currently in Sept 2023. 
@@ -68,106 +65,8 @@ print(llm_name)
 #os.environ["LANGCHAIN_API_KEY"] = "..."
 
 
-# In[ ]:
 
 
-from langchain.vectorstores import Chroma
-from langchain.embeddings.openai import OpenAIEmbeddings
-persist_directory = 'docs/chroma/'
-embedding = OpenAIEmbeddings()
-vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
-
-
-# In[ ]:
-
-
-question = "What are major topics for this class?"
-docs = vectordb.similarity_search(question,k=3)
-len(docs)
-
-
-# In[ ]:
-
-
-from langchain.chat_models import ChatOpenAI
-llm = ChatOpenAI(model_name=llm_name, temperature=0)
-llm.predict("Hello world!")
-
-
-# In[ ]:
-
-
-# Build prompt
-from langchain.prompts import PromptTemplate
-template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Use three sentences maximum. Keep the answer as concise as possible. Always say "thanks for asking!" at the end of the answer. 
-{context}
-Question: {question}
-Helpful Answer:"""
-QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"],template=template,)
-
-# Run chain
-from langchain.chains import RetrievalQA
-question = "Is probability a class topic?"
-qa_chain = RetrievalQA.from_chain_type(llm,
-                                       retriever=vectordb.as_retriever(),
-                                       return_source_documents=True,
-                                       chain_type_kwargs={"prompt": QA_CHAIN_PROMPT})
-
-
-result = qa_chain({"query": question})
-result["result"]
-
-
-# ### Memory
-
-# In[ ]:
-
-
-from langchain.memory import ConversationBufferMemory
-memory = ConversationBufferMemory(
-    memory_key="chat_history",
-    return_messages=True
-)
-
-
-# ### ConversationalRetrievalChain
-
-# In[ ]:
-
-
-from langchain.chains import ConversationalRetrievalChain
-retriever=vectordb.as_retriever()
-qa = ConversationalRetrievalChain.from_llm(
-    llm,
-    retriever=retriever,
-    memory=memory
-)
-
-
-# In[ ]:
-
-
-question = "Is probability a class topic?"
-result = qa({"question": question})
-
-
-# In[ ]:
-
-
-result['answer']
-
-
-# In[ ]:
-
-
-question = "why are those prerequesites needed?"
-result = qa({"question": question})
-
-
-# In[ ]:
-
-
-result['answer']
 
 
 # # Create a chatbot that works on your documents
