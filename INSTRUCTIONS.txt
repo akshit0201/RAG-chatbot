@@ -1,0 +1,24 @@
+
+How to Run the Boilerplate Chatbot Project:
+
+1. Ensure you have Python installed on your system. The project is compatible with Python 3.8 or above.
+
+2. Navigate to the boilerplate_chat_project directory from your terminal.
+
+3. (Optional) Create a virtual environment for the project to manage dependencies:
+   `python3 -m venv chatbot_env`
+
+4. Activate the virtual environment:
+   On Windows: `chatbot_env\Scripts\activate`
+   On Unix or MacOS: `source chatbot_env/bin/activate`
+
+5. Install the required dependencies by running:
+   `pip install -r requirements.txt`
+
+6. Once the dependencies are installed, you can start the chatbot application by running:
+   `python main.py`
+
+It is assumed that you have or will set up your OpenAI API key in an environment variable named 'OPENAI_API_KEY',
+or in a local `.env` file in the same directory as the `main.py` script.
+
+The graphical user interface should now launch in your default web browser, allowing you to interact with the chatbot.
