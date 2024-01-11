@@ -25,11 +25,12 @@ pn.extension()
 
 
 # Code to create a pop-up dialog for OpenAI API Key input
-def api_key_callback(attr, old, new):
-    openai.api_key = new
+# The callback function to handle API key input changes
+def api_key_callback(event):
+    openai.api_key = event.new
 
 api_key_input = pn.widgets.TextInput(name='Enter your OpenAI API Key:', placeholder='API Key')
-api_key_input.on_change('value', api_key_callback)
+api_key_input.param.watch(api_key_callback, 'value')
 
 # Add the API key input to the top of the GUI layout
 layout = pn.Column(api_key_input)
