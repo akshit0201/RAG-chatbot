@@ -24,16 +24,10 @@ pn.extension()
 
 
 
-# Code to create a pop-up dialog for OpenAI API Key input
-# The callback function to handle API key input changes
-def api_key_callback(event):
-    openai.api_key = event.new
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv()) # read local .env file
 
-api_key_input = pn.widgets.TextInput(name='Enter your OpenAI API Key:', placeholder='API Key')
-api_key_input.param.watch(api_key_callback, 'value')
-
-# Add the API key input to the top of the GUI layout
-layout = pn.Column(api_key_input)
+openai.api_key  = os.environ['OPENAI_API_KEY']
 
 
 # The code below was added to assign the openai LLM version filmed until it is deprecated, currently in Sept 2023. 
@@ -130,7 +124,7 @@ class cbfs(param.Parameterized):
     def __init__(self,  **params):
         super(cbfs, self).__init__( **params)
         self.panels = []
-        self.loaded_file = "docs/cs229_lectures/MachineLearning-Lecture01.pdf"
+        self.loaded_file = "docs/computer.pdf"
         self.qa = load_db(self.loaded_file,"stuff", 4)
     
     def call_load_db(self, count):

@@ -2,3 +2,6 @@ openai
 langchain
 panel
 python-dotenv
+pypdf
+docarray
+tiktoken
